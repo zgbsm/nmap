@@ -97,7 +97,7 @@ func (s *Scanner) Streamer(stream io.Writer) *Scanner {
 
 // Run will run the Scanner with the enabled options.
 // You need to create a Run struct and warnings array first so the function can parse it.
-func (s *Scanner) Run() (result *Run, warnings *[]string, err error) {
+func (s *Scanner) Run(c *exec.Cmd) (result *Run, warnings *[]string, err error) {
 	var stdoutPipe io.ReadCloser
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
@@ -116,6 +116,7 @@ func (s *Scanner) Run() (result *Run, warnings *[]string, err error) {
 
 	// Prepare nmap process.
 	cmd := exec.CommandContext(s.ctx, s.binaryPath, args...)
+	c = cmd
 	if s.modifySysProcAttr != nil {
 		s.modifySysProcAttr(cmd.SysProcAttr)
 	}
